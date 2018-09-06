@@ -1,5 +1,5 @@
-#ifndef APPSRV_COMMON_H_
-#define APPSRV_COMMON_H_
+#ifndef APPSRV_UTILS_H_
+#define APPSRV_UTILS_H_
 
 typedef struct
 {
