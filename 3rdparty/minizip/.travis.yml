@@ -1,0 +1,19 @@
+language: c
+
+os:
+    - linux
+
+compiler:
+    - clang
+    - gcc
+
+before_install:
+    - sudo apt-get install libbsd-dev
+
+before_script:
+    - mkdir build
+    - cd build
+    - cmake .. -DBUILD_TEST=ON
+
+script:
+    - make
