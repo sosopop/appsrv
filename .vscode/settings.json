@@ -21,6 +21,14 @@
         "xiosbase": "c",
         "timeb.h": "c",
         "initializer_list": "cpp",
-        "system_error": "c"
+        "system_error": "c",
+        "appsrv_internal.h": "c",
+        "appsrv_thread.h": "c",
+        "curl_threads.h": "c",
+        "mongoose.h": "c",
+        "ws2tcpip.h": "c",
+        "curl_setup.h": "c",
+        "curl_setup_once.h": "c",
+        "stdbool.h": "c"
     }
 }

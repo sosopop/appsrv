@@ -10,7 +10,7 @@ include_directories("../3rdparty/mbedtls/include")
 include_directories("../3rdparty/minizip")
 #include_directories("../3rdparty/mariadb-connector-c/include")
 
-add_definitions(-DCURL_STATICLIB -DAPPSRV_ENABLE_DEBUG -DMG_ENABLE_SSL)
+add_definitions(-DCURL_STATICLIB -DAPPSRV_ENABLE_DEBUG -DMG_ENABLE_SSL -DMG_ENABLE_MQTT_BROKER)
 
 aux_source_directory(. APPSRV_SOURCE)
 

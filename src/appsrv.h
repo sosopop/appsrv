@@ -38,30 +38,29 @@ extern "C"
 
     typedef enum
     {
-        APPSRV_OPT_DATA_PATH = 1,
+        APPSRV_OPT_DATA_PATH = 0,
         APPSRV_OPT_MAIN_SCRIPT_PATH,
+        APPSRV_OPT_BIND_HTTP_FILE_ADDR,
         APPSRV_OPT_BIND_HTTP_ADDR,
         APPSRV_OPT_BIND_MQTT_ADDR,
-        APPSRV_OPT_SERVICE
+        APPSRV_OPT_HTTP_FILE_PATH
     } appsrv_option;
 
     typedef enum
     {
-        APPSRV_SERVICE_HTTP = 1,
-        APPSRV_SERVICE_MQTT_OVER_WEBSOCKET
-    } appsrv_service_type;
-
-    typedef enum
-    {
-        APPSRV_INFO_BIND_HTTP_ADDR = 1,
+        APPSRV_INFO_BIND_HTTP_ADDR = 0,
+        APPSRV_INFO_BIND_HTTP_FILE_ADDR,
         APPSRV_INFO_BIND_MQTT_ADDR
     } appsrv_info;
 
     typedef void *appsrv_handle;
 
-#define APPSRV_ERROR_MAP(XX) \
-    XX(OK, "success")        \
-    XX(UNKNOWN, "unknown error happened")
+#define APPSRV_ERROR_MAP(XX)               \
+    XX(OK, "success")                      \
+    XX(UNKNOWN, "unknown error happened")  \
+    XX(INVALID_ARGS, "invalid arguments")  \
+    XX(INVALID_OPTIONS, "invalid options") \
+    XX(ADDR_BIND, "address bind failed")
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {
@@ -87,10 +86,13 @@ extern "C"
     int appsrv_start(
         appsrv_handle appsrv);
 
+    int appsrv_poll(
+        appsrv_handle appsrv);
+
     int appsrv_stop(
         appsrv_handle appsrv);
 
-    void appsrv_wait_and_close(
+    void appsrv_close(
         appsrv_handle appsrv);
 
     void appsrv_free(

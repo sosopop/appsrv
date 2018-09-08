@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(appsrv VERSION 0.1.0)
+project(appsrv LANGUAGES C VERSION 0.1.0)
 
 include(CheckIncludeFile)
 
