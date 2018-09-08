@@ -62,12 +62,15 @@ extern "C"
 #define APPSRV_ERROR_MAP(XX) \
     XX(OK, "success")        \
     XX(UNKNOWN, "unknown error happened")
-#define APPSRV_ERROR_GEN(n, s) SP_E_##n,
+#define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {
         APPSRV_ERROR_MAP(APPSRV_ERROR_GEN)
     } appsrv_errno;
 #undef APPSRV_ERROR_GEN
+
+    void appsrv_global_init();
+    void appsrv_global_uninit();
 
     appsrv_handle appsrv_create();
 

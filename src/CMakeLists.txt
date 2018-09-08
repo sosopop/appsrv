@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0.0)
 include_directories("../3rdparty/sqlite3")
 include_directories("../3rdparty/duktape")
 include_directories("../3rdparty/libcurl/include")
+include_directories("../3rdparty/libcurl/lib")
 include_directories("../3rdparty/zlib")
 include_directories("../3rdparty/mongoose")
 include_directories("../3rdparty/mbedtls/include")
@@ -26,8 +27,9 @@ endif()
 list(APPEND LINK_LIB sqlite3 duktape libcurl 
 ${WHOLE_ARCHIVE_BEGIN}
 zlibstatic 
+mbedcrypto mbedtls mbedx509 
 ${WHOLE_ARCHIVE_END}
-mbedcrypto mbedtls mbedx509 mongoose libminizip)
+mongoose libminizip)
 if(WIN32)
     list(APPEND LINK_LIB ws2_32 iphlpapi psapi userenv)
 endif()
