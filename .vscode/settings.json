@@ -2,6 +2,25 @@
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "C_Cpp.configurationWarnings": "Disabled",
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
-    "C_Cpp.errorSquiggles": "Disabled"
-
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "appsrv_common.h": "c",
+        "appsrv_task.h": "c",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "xlocale": "cpp",
+        "istream": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "xlocnum": "cpp",
+        "appsrv_utils.h": "c",
+        "stdio.h": "c",
+        "stdarg.h": "c",
+        "xiosbase": "c",
+        "timeb.h": "c",
+        "initializer_list": "cpp",
+        "system_error": "c"
+    }
 }

@@ -3,6 +3,7 @@
 
 typedef struct
 {
+    const char *container_name;
 } appsrv_task_container;
 
 int appsrv_task_container_init(
