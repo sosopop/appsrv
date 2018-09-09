@@ -1,0 +1,4 @@
+#ifndef APPSRV_OBJECT_TABLE_H_
+#define APPSRV_OBJECT_TABLE_H_
+
+#endif
