@@ -3,6 +3,7 @@
 #include "appsrv_utils.h"
 #include "appsrv_thread.h"
 #include "appsrv_log.h"
+#include "appsrv_script.h"
 
 //日志互斥变量
 extern appsrv_mutex_t log_mutex;
@@ -55,14 +56,19 @@ int appsrv_set_option(
         app->data_path = strdup(va_arg(ap, const char *));
         break;
     case APPSRV_OPT_SCRIPT_PATH:
-        if (app->main_script_path)
-            free(app->main_script_path);
-        app->main_script_path = strdup(va_arg(ap, const char *));
+        if (app->script_path)
+            free(app->script_path);
+        app->script_path = strdup(va_arg(ap, const char *));
         break;
     case APPSRV_OPT_BIND_HTTP_ADDR:
         if (app->http_bind_addr)
             free(app->http_bind_addr);
         app->http_bind_addr = strdup(va_arg(ap, const char *));
+        break;
+    case APPSRV_OPT_BIND_MQTT_ADDR:
+        if (app->mqtt_bind_addr)
+            free(app->mqtt_bind_addr);
+        app->mqtt_bind_addr = strdup(va_arg(ap, const char *));
         break;
     default:
         ret = APPSRV_E_INVALID_ARGS;
@@ -109,6 +115,20 @@ int appsrv_get_info(
         }
     }
     break;
+    case APPSRV_INFO_BIND_MQTT_ADDR:
+    {
+        char *addr = appsrv_get_addr_info(app->mqtt_nc);
+        if (addr)
+        {
+            *va_arg(ap, const char **) = addr;
+        }
+        else
+        {
+            ret = APPSRV_E_OBJECT_NOT_EXIST;
+            goto cleanup;
+        }
+    }
+    break;
     default:
         ret = APPSRV_E_INVALID_ARGS;
         break;
@@ -116,15 +136,6 @@ int appsrv_get_info(
 cleanup:
     va_end(ap);
     return ret;
-}
-
-static void http_file_ev_handler(struct mg_connection *nc, int ev, void *p)
-{
-    appsrv_t *app = (appsrv_t *)nc->mgr->user_data;
-    if (ev == MG_EV_HTTP_REQUEST)
-    {
-        mg_serve_http(nc, (struct http_message *)p, app->http_server_opts);
-    }
 }
 
 static appsrv_conn_t *accept_conn(
@@ -179,14 +190,15 @@ static void mqtt_ev_handler(struct mg_connection *nc, int ev, void *p)
 }
 
 int appsrv_start(
-    appsrv_handle appsrv)
+    appsrv_handle appsrv, const char *main_script)
 {
     int ret = APPSRV_E_OK;
     appsrv_t *app = (appsrv_t *)appsrv;
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_start");
     appsrv_log(APPSRV_LOG_DEBUG, "opt->data_path: %s", app->data_path);
-    appsrv_log(APPSRV_LOG_DEBUG, "opt->main_script_path: %s", app->main_script_path);
+    appsrv_log(APPSRV_LOG_DEBUG, "opt->script_path: %s", app->script_path);
     appsrv_log(APPSRV_LOG_DEBUG, "opt->http_bind_addr: %s", app->http_bind_addr);
+    appsrv_log(APPSRV_LOG_DEBUG, "opt->mqtt_bind_addr: %s", app->mqtt_bind_addr);
 
     mg_mgr_init(&app->mgr, app);
 
@@ -202,7 +214,36 @@ int appsrv_start(
         goto cleanup;
     }
     mg_set_protocol_http_websocket(app->http_nc);
+
+    if (app->mqtt_bind_addr)
+    {
+        app->mqtt_nc = mg_bind(&app->mgr, app->mqtt_bind_addr, mqtt_ev_handler);
+        if (app->mqtt_nc == 0)
+        {
+            ret = APPSRV_E_ADDR_BIND;
+            goto cleanup;
+        }
+        mg_mqtt_broker_init(&app->mqtt_broker, app);
+        app->mqtt_nc->priv_2 = &app->mqtt_broker;
+        mg_set_protocol_mqtt(app->mqtt_nc);
+    }
+
+    duk_context *script_ctx = appsrv_script_create();
+    if (!script_ctx)
+    {
+        ret = APPSRV_E_SCRIPT_CREATE_FAILED;
+        goto cleanup;
+    }
+    if (appsrv_script_run(script_ctx, main_script) != 0)
+    {
+        ret = APPSRV_E_SCRIPT_RUN_FAILED;
+        goto cleanup;
+    }
 cleanup:
+    if (script_ctx)
+    {
+        appsrv_script_destroy(script_ctx);
+    }
     return ret;
 }
 
@@ -228,20 +269,18 @@ int appsrv_stop(
     return APPSRV_E_OK;
 }
 
-void appsrv_close(
+void appsrv_destroy(
     appsrv_handle appsrv)
 {
-    appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_close");
+    appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_destroy");
     appsrv_t *app = (appsrv_t *)appsrv;
 
     mg_mgr_free(&app->mgr);
 
     free(app->data_path);
+    free(app->script_path);
     free(app->http_bind_addr);
-    free(app->http_file_path);
     free(app->mqtt_bind_addr);
-    free(app->http_file_bind_addr);
-    free(app->main_script_path);
     free(app);
 }
 

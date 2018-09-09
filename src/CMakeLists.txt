@@ -13,6 +13,7 @@ include_directories("../3rdparty/minizip")
 add_definitions(-DCURL_STATICLIB -DAPPSRV_ENABLE_DEBUG -DMG_ENABLE_SSL -DMG_ENABLE_MQTT_BROKER)
 
 aux_source_directory(. APPSRV_SOURCE)
+aux_source_directory(./jsbind APPSRV_SOURCE)
 
 add_executable(appsrv ${APPSRV_SOURCE})
 

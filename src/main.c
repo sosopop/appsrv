@@ -34,7 +34,7 @@ int main(int argc, char const *argv[])
     if (APPSRV_E_OK != ret)
         goto cleanup;
 
-    ret = appsrv_start(app);
+    ret = appsrv_start(app, "function test(){console.log('hello appsrv');} test(); console.log(require('test'));");
     if (APPSRV_E_OK != ret)
         goto cleanup;
 
@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
         goto cleanup;
 cleanup:
     if (app)
-        appsrv_close(app);
+        appsrv_destroy(app);
 
     appsrv_global_uninit();
 #if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)

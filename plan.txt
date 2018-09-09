@@ -7,3 +7,16 @@ js对象回收的时候，处理c对象的回收
 单元测试
 
 启动线程 poll
+
+
+初始化http
+加载启动脚本
+获取http接口
+poll
+
+create
+set_opt
+start
+poll
+stop
+destroy

@@ -38,6 +38,12 @@
         "ratio": "c",
         "xmemory0": "c",
         "xtr1common": "c",
-        "thread": "c"
+        "thread": "c",
+        "appsrv_script.h": "c",
+        "duk_console.h": "c",
+        "cmath": "c",
+        "duk_module_duktape.h": "c",
+        "streambuf": "cpp",
+        "appsrv.h": "c"
     }
 }

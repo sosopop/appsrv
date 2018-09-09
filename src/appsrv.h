@@ -40,23 +40,27 @@ extern "C"
     {
         APPSRV_OPT_DATA_PATH = 0,
         APPSRV_OPT_SCRIPT_PATH,
-        APPSRV_OPT_BIND_HTTP_ADDR
+        APPSRV_OPT_BIND_HTTP_ADDR,
+        APPSRV_OPT_BIND_MQTT_ADDR
     } appsrv_option;
 
     typedef enum
     {
-        APPSRV_INFO_BIND_HTTP_ADDR = 0
+        APPSRV_INFO_BIND_HTTP_ADDR = 0,
+        APPSRV_INFO_BIND_MQTT_ADDR
     } appsrv_info;
 
     typedef void *appsrv_handle;
 
-#define APPSRV_ERROR_MAP(XX)               \
-    XX(OK, "success")                      \
-    XX(UNKNOWN, "unknown error happened")  \
-    XX(INVALID_ARGS, "invalid arguments")  \
-    XX(INVALID_OPTIONS, "invalid options") \
-    XX(ADDR_BIND, "address bind failed")   \
-    XX(OBJECT_NOT_EXIST, "object not exist")
+#define APPSRV_ERROR_MAP(XX)                         \
+    XX(OK, "success")                                \
+    XX(UNKNOWN, "unknown error happened")            \
+    XX(INVALID_ARGS, "invalid arguments")            \
+    XX(INVALID_OPTIONS, "invalid options")           \
+    XX(ADDR_BIND, "address bind failed")             \
+    XX(OBJECT_NOT_EXIST, "object not exist")         \
+    XX(SCRIPT_CREATE_FAILED, "script create failed") \
+    XX(SCRIPT_RUN_FAILED, "script run failed")
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {
@@ -80,7 +84,7 @@ extern "C"
         ...);
 
     int appsrv_start(
-        appsrv_handle appsrv);
+        appsrv_handle appsrv, const char *main_script);
 
     int appsrv_poll(
         appsrv_handle appsrv);
@@ -88,7 +92,7 @@ extern "C"
     int appsrv_stop(
         appsrv_handle appsrv);
 
-    void appsrv_close(
+    void appsrv_destroy(
         appsrv_handle appsrv);
 
     void appsrv_free(
