@@ -39,18 +39,13 @@ extern "C"
     typedef enum
     {
         APPSRV_OPT_DATA_PATH = 0,
-		APPSRV_OPT_MAIN_SCRIPT_PATH,
-		APPSRV_OPT_BIND_HTTP_FILE_ADDR,
-        APPSRV_OPT_BIND_HTTP_ADDR,
-        APPSRV_OPT_BIND_MQTT_ADDR,
-        APPSRV_OPT_HTTP_FILE_PATH
+        APPSRV_OPT_SCRIPT_PATH,
+        APPSRV_OPT_BIND_HTTP_ADDR
     } appsrv_option;
 
     typedef enum
     {
-        APPSRV_INFO_BIND_HTTP_ADDR = 0,
-        APPSRV_INFO_BIND_HTTP_FILE_ADDR,
-        APPSRV_INFO_BIND_MQTT_ADDR
+        APPSRV_INFO_BIND_HTTP_ADDR = 0
     } appsrv_info;
 
     typedef void *appsrv_handle;

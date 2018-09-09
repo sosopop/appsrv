@@ -22,27 +22,15 @@ int main(int argc, char const *argv[])
     if (!app)
         goto cleanup;
 
-    ret = appsrv_set_option(app, APPSRV_OPT_DATA_PATH, ".\\");
+    ret = appsrv_set_option(app, APPSRV_OPT_DATA_PATH, ".\\data");
     if (APPSRV_E_OK != ret)
         goto cleanup;
 
-    ret = appsrv_set_option(app, APPSRV_OPT_MAIN_SCRIPT_PATH, "main.js");
+    ret = appsrv_set_option(app, APPSRV_OPT_SCRIPT_PATH, ".\\script");
     if (APPSRV_E_OK != ret)
         goto cleanup;
 
     ret = appsrv_set_option(app, APPSRV_OPT_BIND_HTTP_ADDR, "0.0.0.0:0");
-    if (APPSRV_E_OK != ret)
-        goto cleanup;
-
-    ret = appsrv_set_option(app, APPSRV_OPT_BIND_HTTP_FILE_ADDR, "0.0.0.0:0");
-    if (APPSRV_E_OK != ret)
-        goto cleanup;
-
-    ret = appsrv_set_option(app, APPSRV_OPT_HTTP_FILE_PATH, "./");
-    if (APPSRV_E_OK != ret)
-        goto cleanup;
-
-    ret = appsrv_set_option(app, APPSRV_OPT_BIND_MQTT_ADDR, "0.0.0.0:0");
     if (APPSRV_E_OK != ret)
         goto cleanup;
 
@@ -56,18 +44,6 @@ int main(int argc, char const *argv[])
     if (APPSRV_E_OK != ret)
         goto cleanup;
     printf("http addr bind: %s\n", addr);
-    appsrv_free(addr);
-
-    ret = appsrv_get_info(app, APPSRV_INFO_BIND_HTTP_FILE_ADDR, &addr);
-    if (APPSRV_E_OK != ret)
-        goto cleanup;
-    printf("http file addr bind: %s\n", addr);
-    appsrv_free(addr);
-
-    ret = appsrv_get_info(app, APPSRV_INFO_BIND_MQTT_ADDR, &addr);
-    if (APPSRV_E_OK != ret)
-        goto cleanup;
-    printf("mqtt addr bind: %s\n", addr);
     appsrv_free(addr);
 
     ret = appsrv_poll(app);

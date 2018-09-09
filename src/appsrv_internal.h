@@ -14,8 +14,6 @@ typedef struct
 
     struct mg_mgr mgr;
     struct mg_connection *http_nc;
-    struct mg_connection *http_file_nc;
-    struct mg_connection *mqtt_nc;
     struct mg_serve_http_opts http_server_opts;
     struct mg_mqtt_broker mqtt_broker;
 

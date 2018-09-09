@@ -54,7 +54,7 @@ int appsrv_set_option(
             free(app->data_path);
         app->data_path = strdup(va_arg(ap, const char *));
         break;
-    case APPSRV_OPT_MAIN_SCRIPT_PATH:
+    case APPSRV_OPT_SCRIPT_PATH:
         if (app->main_script_path)
             free(app->main_script_path);
         app->main_script_path = strdup(va_arg(ap, const char *));
@@ -63,21 +63,6 @@ int appsrv_set_option(
         if (app->http_bind_addr)
             free(app->http_bind_addr);
         app->http_bind_addr = strdup(va_arg(ap, const char *));
-        break;
-    case APPSRV_OPT_BIND_HTTP_FILE_ADDR:
-        if (app->http_file_bind_addr)
-            free(app->http_file_bind_addr);
-        app->http_file_bind_addr = strdup(va_arg(ap, const char *));
-        break;
-    case APPSRV_OPT_BIND_MQTT_ADDR:
-        if (app->mqtt_bind_addr)
-            free(app->mqtt_bind_addr);
-        app->mqtt_bind_addr = strdup(va_arg(ap, const char *));
-        break;
-    case APPSRV_OPT_HTTP_FILE_PATH:
-        if (app->http_file_path)
-            free(app->http_file_path);
-        app->http_file_path = strdup(va_arg(ap, const char *));
         break;
     default:
         ret = APPSRV_E_INVALID_ARGS;
@@ -113,34 +98,6 @@ int appsrv_get_info(
     case APPSRV_INFO_BIND_HTTP_ADDR:
     {
         char *addr = appsrv_get_addr_info(app->http_nc);
-        if (addr)
-        {
-            *va_arg(ap, const char **) = addr;
-        }
-        else
-        {
-            ret = APPSRV_E_OBJECT_NOT_EXIST;
-            goto cleanup;
-        }
-    }
-    break;
-    case APPSRV_INFO_BIND_HTTP_FILE_ADDR:
-    {
-        char *addr = appsrv_get_addr_info(app->http_file_nc);
-        if (addr)
-        {
-            *va_arg(ap, const char **) = addr;
-        }
-        else
-        {
-            ret = APPSRV_E_OBJECT_NOT_EXIST;
-            goto cleanup;
-        }
-    }
-    break;
-    case APPSRV_INFO_BIND_MQTT_ADDR:
-    {
-        char *addr = appsrv_get_addr_info(app->mqtt_nc);
         if (addr)
         {
             *va_arg(ap, const char **) = addr;
@@ -230,9 +187,6 @@ int appsrv_start(
     appsrv_log(APPSRV_LOG_DEBUG, "opt->data_path: %s", app->data_path);
     appsrv_log(APPSRV_LOG_DEBUG, "opt->main_script_path: %s", app->main_script_path);
     appsrv_log(APPSRV_LOG_DEBUG, "opt->http_bind_addr: %s", app->http_bind_addr);
-    appsrv_log(APPSRV_LOG_DEBUG, "opt->mqtt_bind_addr: %s", app->mqtt_bind_addr);
-    appsrv_log(APPSRV_LOG_DEBUG, "opt->http_file_bind_addr: %s", app->http_file_bind_addr);
-    appsrv_log(APPSRV_LOG_DEBUG, "opt->http_file_path: %s", app->http_file_path);
 
     mg_mgr_init(&app->mgr, app);
 
@@ -248,36 +202,6 @@ int appsrv_start(
         goto cleanup;
     }
     mg_set_protocol_http_websocket(app->http_nc);
-
-    if (app->http_file_bind_addr)
-    {
-        if (!app->http_file_path)
-        {
-            ret = APPSRV_E_INVALID_OPTIONS;
-            goto cleanup;
-        }
-        app->http_server_opts.document_root = app->http_file_path;
-        app->http_file_nc = mg_bind(&app->mgr, app->http_file_bind_addr, http_file_ev_handler);
-        if (app->http_file_nc == 0)
-        {
-            ret = APPSRV_E_ADDR_BIND;
-            goto cleanup;
-        }
-        mg_set_protocol_http_websocket(app->http_file_nc);
-    }
-    if (app->mqtt_bind_addr)
-    {
-        app->mqtt_nc = mg_bind(&app->mgr, app->mqtt_bind_addr, mqtt_ev_handler);
-        if (app->mqtt_nc == 0)
-        {
-            ret = APPSRV_E_ADDR_BIND;
-            goto cleanup;
-        }
-        mg_mqtt_broker_init(&app->mqtt_broker, app);
-        app->mqtt_nc->priv_2 = &app->mqtt_broker;
-        mg_set_protocol_mqtt(app->mqtt_nc);
-    }
-
 cleanup:
     return ret;
 }
