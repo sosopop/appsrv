@@ -1,4 +1,5 @@
 #include "appsrv_thread.h"
+#include <stdlib.h>
 
 #if defined(WIN32)
 
