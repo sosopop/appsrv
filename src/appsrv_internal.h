@@ -18,6 +18,16 @@ typedef struct
     struct mg_connection *mqtt_nc;
     struct mg_serve_http_opts http_server_opts;
     struct mg_mqtt_broker mqtt_broker;
+
+    char stop_sign : 1;
+    unsigned long long conn_cur_id;
 } appsrv_t;
+
+typedef struct
+{
+    unsigned long long id;
+    int type;
+    struct mg_connection *nc;
+} appsrv_conn_t;
 
 #endif

@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     if (!app)
         goto cleanup;
 
-    ret = appsrv_set_option(app, APPSRV_OPT_DATA_PATH, ".\\test\\");
+    ret = appsrv_set_option(app, APPSRV_OPT_DATA_PATH, ".\\");
     if (APPSRV_E_OK != ret)
         goto cleanup;
 

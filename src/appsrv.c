@@ -170,9 +170,50 @@ static void http_file_ev_handler(struct mg_connection *nc, int ev, void *p)
     }
 }
 
-static void http_dynimac_ev_handler(struct mg_connection *nc, int ev, void *p)
+static appsrv_conn_t *accept_conn(
+    struct mg_connection *nc)
 {
     appsrv_t *app = (appsrv_t *)nc->mgr->user_data;
+    appsrv_conn_t *appsrv_conn = (appsrv_conn_t *)malloc(sizeof(appsrv_conn_t));
+    memset(appsrv_conn, 0, sizeof(appsrv_conn_t));
+    appsrv_conn->nc = nc;
+    nc->user_data = appsrv_conn->nc;
+    appsrv_conn->id = app->conn_cur_id++;
+    return appsrv_conn;
+}
+
+static close_conn(
+    struct mg_connection *nc)
+{
+    appsrv_t *app = (appsrv_t *)nc->mgr->user_data;
+    appsrv_conn_t *appsrv_conn = nc->user_data;
+    nc->user_data = 0;
+    free(appsrv_conn);
+}
+
+static void http_dynimac_ev_handler(struct mg_connection *nc, int ev, void *p)
+{
+    if (ev == MG_EV_POLL)
+        goto cleanup;
+
+    switch (ev)
+    {
+    case MG_EV_ACCEPT:
+    {
+        accept_conn(nc);
+    }
+    break;
+    case MG_EV_CLOSE:
+    {
+        close_conn(nc);
+    }
+    break;
+    case MG_EV_HTTP_REQUEST:
+    {
+    }
+    break;
+    }
+cleanup:;
 }
 
 static void mqtt_ev_handler(struct mg_connection *nc, int ev, void *p)
@@ -244,12 +285,12 @@ cleanup:
 int appsrv_poll(
     appsrv_handle appsrv)
 {
+    appsrv_t *app = (appsrv_t *)appsrv;
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_poll");
-#if WIN32
-    Sleep(1000);
-#else
-    sleep(1);
-#endif
+    for (; !app->stop_sign;)
+    {
+        mg_mgr_poll(&app->mgr, 100);
+    }
     return APPSRV_E_OK;
 }
 
@@ -257,6 +298,9 @@ int appsrv_stop(
     appsrv_handle appsrv)
 {
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_stop");
+    appsrv_t *app = (appsrv_t *)appsrv;
+    app->stop_sign = 1;
+
     return APPSRV_E_OK;
 }
 

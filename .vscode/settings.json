@@ -33,6 +33,11 @@
         "list": "c",
         "vector": "c",
         "xhash": "c",
-        "functional": "cpp"
+        "functional": "cpp",
+        "chrono": "c",
+        "ratio": "c",
+        "xmemory0": "c",
+        "xtr1common": "c",
+        "thread": "c"
     }
 }
