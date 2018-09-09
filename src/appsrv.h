@@ -60,7 +60,8 @@ extern "C"
     XX(UNKNOWN, "unknown error happened")  \
     XX(INVALID_ARGS, "invalid arguments")  \
     XX(INVALID_OPTIONS, "invalid options") \
-    XX(ADDR_BIND, "address bind failed")
+    XX(ADDR_BIND, "address bind failed")   \
+    XX(OBJECT_NOT_EXIST, "object not exist")
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {

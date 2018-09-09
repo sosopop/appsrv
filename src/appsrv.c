@@ -87,12 +87,21 @@ int appsrv_set_option(
     return ret;
 }
 
+static char *appsrv_get_addr_info(struct mg_connection *nc)
+{
+    char addr[30] = {0};
+    if (nc && mg_conn_addr_to_str(nc, addr, sizeof(addr), MG_SOCK_STRINGIFY_IP | MG_SOCK_STRINGIFY_PORT))
+    {
+        return strdup(addr);
+    }
+    return 0;
+}
+
 int appsrv_get_info(
     appsrv_handle appsrv,
     appsrv_info info,
     ...)
 {
-
     int ret = APPSRV_E_OK;
 
     appsrv_t *app = (appsrv_t *)appsrv;
@@ -102,18 +111,52 @@ int appsrv_get_info(
     switch (info)
     {
     case APPSRV_INFO_BIND_HTTP_ADDR:
-        *va_arg(ap, const char **) = 0;
-        break;
+    {
+        char *addr = appsrv_get_addr_info(app->http_nc);
+        if (addr)
+        {
+            *va_arg(ap, const char **) = addr;
+        }
+        else
+        {
+            ret = APPSRV_E_OBJECT_NOT_EXIST;
+            goto cleanup;
+        }
+    }
+    break;
     case APPSRV_INFO_BIND_HTTP_FILE_ADDR:
-        *va_arg(ap, const char **) = 0;
-        break;
+    {
+        char *addr = appsrv_get_addr_info(app->http_file_nc);
+        if (addr)
+        {
+            *va_arg(ap, const char **) = addr;
+        }
+        else
+        {
+            ret = APPSRV_E_OBJECT_NOT_EXIST;
+            goto cleanup;
+        }
+    }
+    break;
     case APPSRV_INFO_BIND_MQTT_ADDR:
-        *va_arg(ap, const char **) = 0;
-        break;
+    {
+        char *addr = appsrv_get_addr_info(app->mqtt_nc);
+        if (addr)
+        {
+            *va_arg(ap, const char **) = addr;
+        }
+        else
+        {
+            ret = APPSRV_E_OBJECT_NOT_EXIST;
+            goto cleanup;
+        }
+    }
+    break;
     default:
         ret = APPSRV_E_INVALID_ARGS;
         break;
     }
+cleanup:
     va_end(ap);
     return ret;
 }
@@ -229,6 +272,7 @@ void appsrv_close(
     free(app->http_bind_addr);
     free(app->http_file_path);
     free(app->mqtt_bind_addr);
+    free(app->http_file_bind_addr);
     free(app->main_script_path);
     free(app);
 }

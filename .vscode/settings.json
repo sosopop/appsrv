@@ -29,6 +29,10 @@
         "ws2tcpip.h": "c",
         "curl_setup.h": "c",
         "curl_setup_once.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "list": "c",
+        "vector": "c",
+        "xhash": "c",
+        "functional": "cpp"
     }
 }
