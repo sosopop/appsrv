@@ -65,8 +65,8 @@ extern "C"
         const char *data_path,
         appsrv_handle *appsrv);
 
-    int appsrv_exec_script(
-        appsrv_handle appsrv, const char *script, char **out);
+    int appsrv_post_task(
+        appsrv_handle appsrv, const char *script);
 
     int appsrv_wait(
         appsrv_handle appsrv);

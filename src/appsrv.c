@@ -20,8 +20,9 @@ int appsrv_create(
     return ret;
 }
 
-int appsrv_exec_script(
-    appsrv_handle appsrv, const char *script, char **out)
+int appsrv_post_task(
+    appsrv_handle appsrv,
+    const char *script)
 {
     int ret = APPSRV_E_OK;
     duk_context *script_ctx = appsrv_script_create();
@@ -30,7 +31,7 @@ int appsrv_exec_script(
         ret = APPSRV_E_SCRIPT_CREATE_FAILED;
         goto cleanup;
     }
-    if (appsrv_script_run(script_ctx, script, out) != 0)
+    if (appsrv_script_run(script_ctx, script) != 0)
     {
         ret = APPSRV_E_SCRIPT_RUN_FAILED;
         goto cleanup;

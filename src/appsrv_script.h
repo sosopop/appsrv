@@ -4,7 +4,7 @@
 
 duk_context *appsrv_script_create();
 
-int appsrv_script_run(duk_context *ctx, const char *script, char **out);
+int appsrv_script_run(duk_context *ctx, const char *script);
 
 void appsrv_script_destroy(duk_context *ctx);
 

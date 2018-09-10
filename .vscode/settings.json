@@ -44,6 +44,8 @@
         "cmath": "c",
         "duk_module_duktape.h": "c",
         "streambuf": "cpp",
-        "appsrv.h": "c"
+        "appsrv.h": "c",
+        "windows.h": "c",
+        "stdlib.h": "c"
     }
 }
