@@ -1,17 +1,17 @@
-����mbedtls android
-ÿ��js�󶨶�����Ӧ���˳��жϣ�����˳����׳��쳣����ɾ����ǰ��
-js������յ�ʱ�򣬴���c����Ļ���
-�����˳��Ļص�
-����������ʹ��js��
-֧�ֳ�����
-��Ԫ����
+加入mbedtls android
+每个js绑定都加上应用退出判断，如果退出则抛出异常或者删除当前堆
+js对象回收的时候，处理c对象的回收
+增加退出的回调
+服务器创建使用js绑定
+支持长任务
+单元测试
 
-�����߳� poll
+启动线程 poll
 
 
-��ʼ��http
-���������ű�
-��ȡhttp�ӿ�
+初始化http
+加载启动脚本
+获取http接口
 poll
 
 create
@@ -21,6 +21,6 @@ poll
 stop
 destroy
 
-��ʼ��ֻ��ʼ���ű�����
-���ж��ɽű�����֧��
-���д����Ķ��󶼼�¼��rbtree�У�ÿ������������
+初始化只初始化脚本引擎
+所有都由脚本引擎支持
+所有创建的对象都记录到rbtree中，每个对象都有名称

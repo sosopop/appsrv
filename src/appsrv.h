@@ -39,16 +39,8 @@ extern "C"
     typedef enum
     {
         APPSRV_OPT_DATA_PATH = 0,
-        APPSRV_OPT_SCRIPT_PATH,
-        APPSRV_OPT_BIND_HTTP_ADDR,
-        APPSRV_OPT_BIND_MQTT_ADDR
+        APPSRV_OPT_SCRIPT_PATH
     } appsrv_option;
-
-    typedef enum
-    {
-        APPSRV_INFO_BIND_HTTP_ADDR = 0,
-        APPSRV_INFO_BIND_MQTT_ADDR
-    } appsrv_info;
 
     typedef void *appsrv_handle;
 
@@ -68,25 +60,15 @@ extern "C"
     } appsrv_errno;
 #undef APPSRV_ERROR_GEN
 
-    void appsrv_global_init();
-    void appsrv_global_uninit();
+    int appsrv_create(
+        const char *script_path,
+        const char *data_path,
+        appsrv_handle *appsrv);
 
-    appsrv_handle appsrv_create();
+    int appsrv_exec_script(
+        appsrv_handle appsrv, const char *script, char **out);
 
-    int appsrv_set_option(
-        appsrv_handle appsrv,
-        appsrv_option opt,
-        ...);
-
-    int appsrv_get_info(
-        appsrv_handle appsrv,
-        appsrv_info info,
-        ...);
-
-    int appsrv_start(
-        appsrv_handle appsrv, const char *main_script);
-
-    int appsrv_poll(
+    int appsrv_wait(
         appsrv_handle appsrv);
 
     int appsrv_stop(

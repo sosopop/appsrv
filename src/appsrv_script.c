@@ -16,13 +16,12 @@ duk_context *appsrv_script_create()
     return ctx;
 }
 
-int appsrv_script_run(duk_context *ctx, const char *script)
+int appsrv_script_run(duk_context *ctx, const char *script, char **out)
 {
     int ret = duk_peval_string(ctx, script);
-    if (ret)
-    {
-        appsrv_log(APPSRV_LOG_ERROR, "script run failed [%s] %s", script, duk_safe_to_string(ctx, -1));
-    }
+    const char *ret_val = duk_safe_to_string(ctx, -1);
+    if (ret_val)
+        *out = strdup(ret_val);
     return ret;
 }
 

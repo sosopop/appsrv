@@ -6,7 +6,6 @@
 #include "appsrv_thread.h"
 
 static appsrv_log_level __appsrv_log_level = APPSRV_LOG_INFO;
-appsrv_mutex_t log_mutex;
 
 void appsrv_set_log_level(
     appsrv_log_level level)
@@ -63,9 +62,7 @@ void _appsrv_log(
         debug_level = "ERROR";
         break;
     }
-    appsrv_mutex_acquire(&log_mutex);
     printf("%s.%03d %s [%s] %s\n", time_str, tmb.millitm, debug_level, fun_name, temp_buf);
-    appsrv_mutex_release(&log_mutex);
 
     if (temp_buf != stack_buf)
         free(temp_buf);
