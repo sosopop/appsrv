@@ -3,11 +3,13 @@
 #include "duktape.h"
 #include "appsrv.h"
 
+typedef void *(*appsrv_service_create_routine)(const char *name);
+
 typedef struct
 {
-    typedef void *(*create)(const char *name);
-    typedef void (*attch)(duk_context *duk, void *obj);
-    typedef void (*stop)(void *obj);
+    void *(*create)(const char *name);
+    void (*attch)(duk_context *duk, void *obj);
+    void (*stop)(void *obj);
 } appsrv_service_cls;
 
 int appsrv_service_reg(appsrv_handle *srv, const char *cls_name, appsrv_service_cls *cls);

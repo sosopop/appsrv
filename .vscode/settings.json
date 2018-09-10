@@ -46,6 +46,8 @@
         "streambuf": "cpp",
         "appsrv.h": "c",
         "windows.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "appsrv_service_table.h": "c",
+        "string.h": "c"
     }
 }
