@@ -17,6 +17,7 @@ int appsrv_create(
     handle->data_path = strdup(data_path);
     handle->script_path = strdup(script_path);
     appsrv_mutex_init(&handle->service_table_mutex);
+    appsrv_mutex_init(&handle->service_cls_mutex);
     *appsrv = handle;
     return ret;
 }
@@ -69,6 +70,7 @@ void appsrv_destroy(
     struct appsrv_s *app = (struct appsrv_s *)appsrv;
 
     appsrv_mutex_destroy(&app->service_table_mutex);
+    appsrv_mutex_destroy(&app->service_cls_mutex);
     free(app->data_path);
     free(app->script_path);
     free(app);

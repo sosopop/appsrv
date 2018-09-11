@@ -3,16 +3,28 @@
 #include "duktape.h"
 #include "appsrv.h"
 
-typedef void *(*appsrv_service_create_routine)(const char *name);
+typedef void *(*appsrv_service_routine_create)(const char *name);
+typedef void (*appsrv_service_routine_attch)(duk_context *duk, void *obj);
+typedef void (*appsrv_service_routine_stop)(void *obj);
 
 struct appsrv_service_cls_s
 {
-    void *(*create)(const char *name);
-    void (*attch)(duk_context *duk, void *obj);
-    void (*stop)(void *obj);
+    char *cls_name;
+    appsrv_service_routine_create create_routine;
+    appsrv_service_routine_attch attach_routine;
+    appsrv_service_routine_stop stop_routine;
+    RB_ENTRY(appsrv_service_cls_s)
 };
 
-int appsrv_service_reg(appsrv_handle *srv, const char *cls_name, struct appsrv_service_cls_s *cls, void* user_data);
-int appsrv_service_set_stoped(appsrv_handle *srv, const char *name);
+RB_HEAD(appsrv_service_cls_table, appsrv_service_cls_s);
+
+struct appsrv_s;
+
+int appsrv_service_reg(
+    appsrv_handle *srv,
+    const char *cls_name,
+    appsrv_service_routine_create create_routine,
+    appsrv_service_routine_attch attach_routine,
+    appsrv_service_routine_stop stop_routine);
 
 #endif
