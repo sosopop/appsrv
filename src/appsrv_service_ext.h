@@ -5,14 +5,14 @@
 
 typedef void *(*appsrv_service_create_routine)(const char *name);
 
-typedef struct
+struct appsrv_service_cls_s
 {
     void *(*create)(const char *name);
     void (*attch)(duk_context *duk, void *obj);
     void (*stop)(void *obj);
-} appsrv_service_cls;
+};
 
-int appsrv_service_reg(appsrv_handle *srv, const char *cls_name, appsrv_service_cls *cls);
+int appsrv_service_reg(appsrv_handle *srv, const char *cls_name, struct appsrv_service_cls_s *cls, void* user_data);
 int appsrv_service_set_stoped(appsrv_handle *srv, const char *name);
 
 #endif

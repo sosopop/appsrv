@@ -48,11 +48,11 @@ extern "C"
     XX(OK, "success")                                \
     XX(UNKNOWN, "unknown error happened")            \
     XX(INVALID_ARGS, "invalid arguments")            \
-    XX(INVALID_OPTIONS, "invalid options")           \
-    XX(ADDR_BIND, "address bind failed")             \
+    XX(OBJECT_ALREADY_EXIST, "object already exist") \
     XX(OBJECT_NOT_EXIST, "object not exist")         \
     XX(SCRIPT_CREATE_FAILED, "script create failed") \
     XX(SCRIPT_RUN_FAILED, "script run failed")
+    
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {

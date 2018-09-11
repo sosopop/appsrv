@@ -11,11 +11,12 @@ int appsrv_create(
     appsrv_handle *appsrv)
 {
     int ret = APPSRV_E_OK;
-    appsrv_t *handle = 0;
-    handle = (appsrv_t *)malloc(sizeof(appsrv_t));
-    memset(handle, 0, sizeof(appsrv_t));
+    struct appsrv_s *handle = 0;
+    handle = (struct appsrv_s *)malloc(sizeof(struct appsrv_s));
+    memset(handle, 0, sizeof(struct appsrv_s));
     handle->data_path = strdup(data_path);
     handle->script_path = strdup(script_path);
+    appsrv_mutex_init(&handle->service_table_mutex);
     *appsrv = handle;
     return ret;
 }
@@ -47,7 +48,7 @@ cleanup:
 int appsrv_wait(
     appsrv_handle appsrv)
 {
-    appsrv_t *app = (appsrv_t *)appsrv;
+    struct appsrv_s *app = (struct appsrv_s *)appsrv;
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_wait");
     return APPSRV_E_OK;
 }
@@ -56,8 +57,8 @@ int appsrv_stop(
     appsrv_handle appsrv)
 {
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_stop");
-    appsrv_t *app = (appsrv_t *)appsrv;
-    app->stop_sign = 1;
+    struct appsrv_s *app = (struct appsrv_s *)appsrv;
+    app->stop_signal = 1;
     return APPSRV_E_OK;
 }
 
@@ -65,8 +66,9 @@ void appsrv_destroy(
     appsrv_handle appsrv)
 {
     appsrv_log(APPSRV_LOG_INFO, "%s", "appsrv_destroy");
-    appsrv_t *app = (appsrv_t *)appsrv;
+    struct appsrv_s *app = (struct appsrv_s *)appsrv;
 
+    appsrv_mutex_destroy(&app->service_table_mutex);
     free(app->data_path);
     free(app->script_path);
     free(app);

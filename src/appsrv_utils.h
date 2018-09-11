@@ -5,10 +5,4 @@
 
 #define appsrv_vsnprintf mg_avprintf
 
-typedef struct
-{
-    char *data;
-    unsigned int size;
-} appsrv_data;
-
 #endif

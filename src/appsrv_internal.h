@@ -3,20 +3,22 @@
 #include "appsrv.h"
 #include <mongoose.h>
 #include "appsrv_service_table.h"
+#include "appsrv_thread.h"
 
-typedef struct appsrv_s
+struct appsrv_s
 {
     char *data_path;
     char *script_path;
-    struct appsrv_service_table table;
-    char stop_sign : 1;
-} appsrv_t;
+    appsrv_mutex_t service_table_mutex;
+    struct appsrv_service_table service_table;
+    char stop_signal : 1;
+};
 
-typedef struct appsrv_conn_s
+struct appsrv_conn_s
 {
     unsigned long long id;
     int type;
     struct mg_connection *nc;
-} appsrv_conn_t;
+};
 
 #endif

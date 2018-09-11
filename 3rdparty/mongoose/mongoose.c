@@ -5265,12 +5265,12 @@ static enum mg_ssl_if_result mg_ssl_if_mbed_set_psk(struct mg_ssl_if_ctx *ctx,
                                                     const char *identity,
                                                     const char *key_str) {
   unsigned char key[32];
+  size_t i = 0;
   size_t key_len;
   if (identity == NULL && key_str == NULL) return MG_SSL_OK;
   if (identity == NULL || key_str == NULL) return MG_SSL_ERROR;
   key_len = strlen(key_str);
   if (key_len != 32 && key_len != 64) return MG_SSL_ERROR;
-  size_t i = 0;
   memset(key, 0, sizeof(key));
   key_len = 0;
   for (i = 0; key_str[i] != '\0'; i++) {
