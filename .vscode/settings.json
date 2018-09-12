@@ -47,6 +47,7 @@
         "windows.h": "c",
         "stdlib.h": "c",
         "appsrv_service_table.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "appsrv.h\u0000ppsrv.h": "c"
     }
 }

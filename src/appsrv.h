@@ -43,6 +43,27 @@ extern "C"
     } appsrv_option;
 
     typedef void *appsrv_handle;
+    typedef void *appsrv_task_container_handle;
+    struct appsrv_data
+    {
+        char *data;
+        unsigned int size;
+    };
+
+    typedef enum
+    {
+        APPSRV_TASK_STATUS_RUNNING,
+        APPSRV_TASK_STATUS_PENDING,
+        APPSRV_TASK_STATUS_DELAY
+    } appsrv_task_status;
+
+    struct appsrv_task_info
+    {
+        const char *task_name;
+        appsrv_task_status status;
+        unsigned int delay;
+        const char *script;
+    };
 
 #define APPSRV_ERROR_MAP(XX)                         \
     XX(OK, "success")                                \
@@ -52,7 +73,7 @@ extern "C"
     XX(OBJECT_NOT_EXIST, "object not exist")         \
     XX(SCRIPT_CREATE_FAILED, "script create failed") \
     XX(SCRIPT_RUN_FAILED, "script run failed")
-    
+
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
     typedef enum
     {
@@ -65,9 +86,6 @@ extern "C"
         const char *data_path,
         appsrv_handle *appsrv);
 
-    int appsrv_post_task(
-        appsrv_handle appsrv, const char *script);
-
     int appsrv_wait(
         appsrv_handle appsrv);
 
@@ -79,6 +97,123 @@ extern "C"
 
     void appsrv_free(
         void *data);
+
+    void appsrv_data_free(
+        struct appsrv_data *data);
+
+    int appsrv_create_task_container(
+        appsrv_handle appsrv,
+        const char *name,
+        unsigned int concurrency,
+        unsigned int persistence);
+
+    int appsrv_empty_task_container(
+        const char *name);
+
+    int appsrv_count_task_container(
+        const char *name,
+        unsigned int *count);
+
+    int appsrv_query_task_container(
+        const char *name,
+        unsigned int start,
+        unsigned int in_count,
+        struct appsrv_task_info *task_info,
+        unsigned int *out_count);
+
+    int appsrv_free_task_info(
+        struct appsrv_task_info *task_info);
+
+    int appsrv_destroy_task_container(
+        const char *name);
+
+    int appsrv_post_task(
+        appsrv_handle appsrv,
+        const char *task_container_name,
+        unsigned int delay,
+        const char *script);
+
+    int appsrv_create_dataset(
+        const char *dataset_name,
+        unsigned int persistence);
+
+    int appsrv_data_set(
+        const char *dataset,
+        const char *key,
+        unsigned int expire,
+        struct appsrv_data *data);
+
+    int appsrv_data_get(
+        const char *dataset,
+        const char *key,
+        struct appsrv_data *data);
+
+    int appsrv_data_expire(
+        const char *dataset,
+        const char *key,
+        unsigned int expire);
+
+    int appsrv_data_delete(
+        const char *dataset,
+        const char *key);
+
+    int appsrv_data_ltpush(
+        const char *dataset,
+        const char *key,
+        unsigned int expire,
+        struct appsrv_data *data);
+
+    int appsrv_data_lfpush(
+        const char *dataset,
+        const char *key,
+        unsigned int expire,
+        struct appsrv_data *data);
+
+    int appsrv_data_ltpop(
+        const char *dataset,
+        const char *key,
+        struct appsrv_data *data);
+
+    int appsrv_data_lfpop(
+        const char *dataset,
+        const char *key,
+        struct appsrv_data *data);
+
+    int appsrv_data_lcount(
+        const char *dataset,
+        const char *key,
+        unsigned int *count);
+
+    int appsrv_data_lrange(
+        const char *dataset,
+        const char *key,
+        unsigned int start,
+        unsigned int in_count,
+        struct appsrv_data *data,
+        unsigned int *out_count);
+
+    int appsrv_data_mset(
+        const char *dataset,
+        const char *key,
+        const char *filed,
+        unsigned int expire,
+        struct appsrv_data *data);
+
+    int appsrv_data_mget(
+        const char *dataset,
+        const char *key,
+        const char *filed,
+        struct appsrv_data *data);
+
+    int appsrv_data_mdelete(
+        const char *dataset,
+        const char *key,
+        const char *filed);
+
+    int appsrv_data_mcount(
+        const char *dataset,
+        const char *key,
+        unsigned int *count);
 
     const char *appsrv_errno_description(
         appsrv_errno error);

@@ -17,8 +17,8 @@ int main(int argc, char const *argv[])
 #ifdef WIN32
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
 #endif
-	assert(test() == APPSRV_E_OK);
-	assert(test1() == APPSRV_E_OK);
+    assert(test() == APPSRV_E_OK);
+    assert(test1() == APPSRV_E_OK);
 #if defined(_MSC_VER) || defined(__MINGW64_VERSION_MAJOR)
     assert(_CrtDumpMemoryLeaks() == 0);
 #endif
