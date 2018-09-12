@@ -133,87 +133,20 @@ extern "C"
         unsigned int delay,
         const char *script);
 
-    int appsrv_create_dataset(
-        const char *dataset_name,
-        unsigned int persistence);
-
     int appsrv_data_set(
-        const char *dataset,
+        appsrv_handle appsrv,
         const char *key,
         unsigned int expire,
         struct appsrv_data *data);
 
     int appsrv_data_get(
-        const char *dataset,
+        appsrv_handle appsrv,
         const char *key,
         struct appsrv_data *data);
-
-    int appsrv_data_expire(
-        const char *dataset,
-        const char *key,
-        unsigned int expire);
 
     int appsrv_data_delete(
-        const char *dataset,
+        appsrv_handle appsrv,
         const char *key);
-
-    int appsrv_data_ltpush(
-        const char *dataset,
-        const char *key,
-        unsigned int expire,
-        struct appsrv_data *data);
-
-    int appsrv_data_lfpush(
-        const char *dataset,
-        const char *key,
-        unsigned int expire,
-        struct appsrv_data *data);
-
-    int appsrv_data_ltpop(
-        const char *dataset,
-        const char *key,
-        struct appsrv_data *data);
-
-    int appsrv_data_lfpop(
-        const char *dataset,
-        const char *key,
-        struct appsrv_data *data);
-
-    int appsrv_data_lcount(
-        const char *dataset,
-        const char *key,
-        unsigned int *count);
-
-    int appsrv_data_lrange(
-        const char *dataset,
-        const char *key,
-        unsigned int start,
-        unsigned int in_count,
-        struct appsrv_data *data,
-        unsigned int *out_count);
-
-    int appsrv_data_mset(
-        const char *dataset,
-        const char *key,
-        const char *filed,
-        unsigned int expire,
-        struct appsrv_data *data);
-
-    int appsrv_data_mget(
-        const char *dataset,
-        const char *key,
-        const char *filed,
-        struct appsrv_data *data);
-
-    int appsrv_data_mdelete(
-        const char *dataset,
-        const char *key,
-        const char *filed);
-
-    int appsrv_data_mcount(
-        const char *dataset,
-        const char *key,
-        unsigned int *count);
 
     const char *appsrv_errno_description(
         appsrv_errno error);
