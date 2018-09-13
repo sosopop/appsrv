@@ -22,6 +22,13 @@ static int appsrv_create_data(struct appsrv_s *appsrv)
         ret = APPSRV_E_DB_ERROR;
         goto cleanup;
     }
+    sql_ret = sqlite3_busy_timeout(appsrv->data_db, SQLITE_TIMEOUT);
+    if (SQLITE_OK != sql_ret)
+    {
+        appsrv_log(APPSRV_LOG_ERROR, "database failed: %s", sqlite3_errmsg(appsrv->data_db));
+        ret = APPSRV_E_DB_ERROR;
+        goto cleanup;
+    }
     sql_ret = sqlite3_exec(appsrv->data_db,
                            "CREATE TABLE [__global_data] ("
                            "[key] CHAR(128), "
@@ -61,6 +68,13 @@ int appsrv_data_set(
         app->data_db_name, &data_db);
     if (sql_ret != SQLITE_OK)
     {
+        ret = APPSRV_E_DB_ERROR;
+        goto cleanup;
+    }
+    sql_ret = sqlite3_busy_timeout(data_db, SQLITE_TIMEOUT);
+    if (SQLITE_OK != sql_ret)
+    {
+        appsrv_log(APPSRV_LOG_ERROR, "database failed: %s", sqlite3_errmsg(data_db));
         ret = APPSRV_E_DB_ERROR;
         goto cleanup;
     }
@@ -114,6 +128,13 @@ int appsrv_data_get(
         app->data_db_name, &data_db);
     if (sql_ret != SQLITE_OK)
     {
+        ret = APPSRV_E_DB_ERROR;
+        goto cleanup;
+    }
+    sql_ret = sqlite3_busy_timeout(data_db, SQLITE_TIMEOUT);
+    if (SQLITE_OK != sql_ret)
+    {
+        appsrv_log(APPSRV_LOG_ERROR, "database failed: %s", sqlite3_errmsg(data_db));
         ret = APPSRV_E_DB_ERROR;
         goto cleanup;
     }
