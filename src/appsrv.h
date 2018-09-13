@@ -72,6 +72,7 @@ extern "C"
     XX(OBJECT_ALREADY_EXIST, "object already exist") \
     XX(OBJECT_NOT_EXIST, "object not exist")         \
     XX(SCRIPT_CREATE_FAILED, "script create failed") \
+    XX(DB_ERROR, "database error")                   \
     XX(SCRIPT_RUN_FAILED, "script run failed")
 
 #define APPSRV_ERROR_GEN(n, s) APPSRV_E_##n,
@@ -97,9 +98,6 @@ extern "C"
 
     void appsrv_free(
         void *data);
-
-    void appsrv_data_free(
-        struct appsrv_data *data);
 
     int appsrv_create_task_container(
         appsrv_handle appsrv,
@@ -136,7 +134,6 @@ extern "C"
     int appsrv_data_set(
         appsrv_handle appsrv,
         const char *key,
-        unsigned int expire,
         struct appsrv_data *data);
 
     int appsrv_data_get(

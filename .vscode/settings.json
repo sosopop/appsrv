@@ -50,6 +50,8 @@
         "string.h": "c",
         "appsrv.h\u0000ppsrv.h": "c",
         "tool_dirhie.h": "c",
-        "tool_setup.h": "c"
+        "tool_setup.h": "c",
+        "appsrv_data.h": "c",
+        "ios": "c"
     }
 }
