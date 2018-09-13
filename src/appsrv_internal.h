@@ -5,6 +5,7 @@
 #include "appsrv_thread.h"
 #include <sqlite3.h>
 
+#define APPSRV_VERSION "0.0.0.1"
 #define SQLITE_TIMEOUT 10 * 1000
 
 struct appsrv_s

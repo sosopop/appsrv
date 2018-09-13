@@ -276,8 +276,6 @@ const char *appsrv_errno_description(
     return appsrv_strerror_tab[error].description;
 }
 
-#define APPSRV_VERSION "0.0.0.1"
-
 const char *appsrv_version()
 {
     return APPSRV_VERSION;
